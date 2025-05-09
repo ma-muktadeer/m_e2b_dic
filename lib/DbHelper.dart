@@ -15,15 +15,15 @@ class DbHelper {
       print('database already exits.');
       final db = await openDatabase(path);
       //db tables name
-      var tableName =
-          (await db.query('sqlite_master', columns: ['type', 'name']))
-              .forEach((element) async {
+      // var tableName =
+      //     (await db.query('sqlite_master', columns: ['type', 'name']))
+      //         .forEach((element) async {
         // print(element['name']);
         // print(element.values);
-      List<Map<String, dynamic>> columnsInfo = await db.rawQuery('PRAGMA table_info("${element['name']}")');
-      List<String> columnNames = columnsInfo.map((info) => info['name'] as String).toList();
-      print('table ${element['name']} colunm name $columnNames');
-      });
+      // List<Map<String, dynamic>> columnsInfo = await db.rawQuery('PRAGMA table_info("${element['name']}")');
+      // List<String> columnNames = columnsInfo.map((info) => info['name'] as String).toList();
+      // print('table ${element['name']} colunm name $columnNames');
+      // });
       // print(tableName);
 
       // var value =
