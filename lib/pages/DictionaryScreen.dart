@@ -41,10 +41,10 @@ class _DictionaryScreenState extends State<DictionaryScreen> {
   }
 
   Future<void> _loadSearchHistory() async {
-    // Load search history from shared preferences or local storage
-    setState(() {
-      _searchHistory = ['Flutter', 'Dictionary', 'Material', 'Design'];
-    });
+      final history = await db.getSearchHistory();
+      setState(() {
+        _searchHistory = history;
+      });
   }
 
   void _updateSuggestions(String query) async {
@@ -132,6 +132,7 @@ class _DictionaryScreenState extends State<DictionaryScreen> {
 
     // Add to search history if not already present
     if (!_searchHistory.contains(word)) {
+      await db.insertSearchTerm(word);
       setState(() {
         _searchHistory.insert(0, word);
         if (_searchHistory.length > 10) {

@@ -14,52 +14,7 @@ class DbHelper {
     if (exist) {
       print('database already exits.');
       final db = await openDatabase(path);
-      //db tables name
-      // var tableName =
-      //     (await db.query('sqlite_master', columns: ['type', 'name']))
-      //         .forEach((element) async {
-        // print(element['name']);
-        // print(element.values);
-      // List<Map<String, dynamic>> columnsInfo = await db.rawQuery('PRAGMA table_info("${element['name']}")');
-      // List<String> columnNames = columnsInfo.map((info) => info['name'] as String).toList();
-      // print('table ${element['name']} colunm name $columnNames');
-      // });
-      // print(tableName);
-
-      // var value =
-      //     await db.rawQuery("select more_mean from details where _id = 43073");
-
-      // print(value);
-
-      // var c = value.elementAt(0).values.last;
-
-      // print(c);
-      // int cc = int.parse(
-      //     'B0468165E1B12170571077411590F1B1610791975145A15191305740D',
-      //     radix: 16);
-      // print(cc);
-      // print(l);
-
-      // var ts = await db.rawQuery('PRAGMA table_info(details_index)');
-      // print(ts);
-
-      // var value = await db.rawQuery("select count(1) from Favorite");
-      // var value = await db.rawQuery("select * from antonyms where _id = 1");
-      // print(value.toList());
-      // var value = await db
-      //     .rawQuery("select more_mean from alldata where word like 'good'");
-      // // print(value.toList());
-      // var dt = value.elementAt(0).values.first;
-      // print(dt);
       return db;
-
-      // String.format(Locale.forLanguageTag("bn"), "%d", 1234567890);
-      // jsonDecode(utf8.decode(dt));
-
-      // var st = dt.toString().transform(utf8.decoder);
-      // var ant =
-      //     await db.rawQuery("select * from antonyms where word like 'good'");
-      // print(ant);
     } else {
       print('database not exits.');
       try {
@@ -76,5 +31,57 @@ class DbHelper {
     }
 
     await openDatabase(path);
+  }
+
+  static const _databaseName = "dictionary.db";
+  static const _databaseVersion = 2; // Incremented version
+
+  // Add history table creation SQL
+  static const createHistoryTable = "CREATE TABLE IF NOT EXISTS search_history ( "
+      " id INTEGER PRIMARY KEY AUTOINCREMENT,"
+      " term TEXT NOT NULL,"
+      "timestamp DATETIME DEFAULT CURRENT_TIMESTAMP);";
+
+  Future<Database> createDatabase() async {
+    final dbPath = await getDatabasesPath();
+    final path = join(dbPath, _databaseName);
+
+    return await openDatabase(
+      path,
+      version: _databaseVersion,
+      onCreate: (db, version) async {
+        await db.execute(createHistoryTable);
+      },
+      onUpgrade: (db, oldVersion, newVersion) async {
+        if (oldVersion < 2) {
+          await db.execute(createHistoryTable);
+        }
+      },
+    );
+  }
+
+  Future<void> insertSearchTerm(String term) async {
+    final db = await createDatabase();
+    await db.insert(
+      'search_history',
+      {'term': term},
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  Future<List<String>> getSearchHistory({int limit = 20}) async {
+    final db = await createDatabase();
+    final results = await db.query(
+      'search_history',
+      columns: ['term'],
+      orderBy: 'timestamp DESC',
+      limit: limit,
+    );
+    return results.map((row) => row['term'] as String).toList();
+  }
+
+  Future<void> clearSearchHistory() async {
+    final db = await createDatabase();
+    await db.delete('search_history');
   }
 }
