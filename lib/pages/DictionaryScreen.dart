@@ -135,7 +135,7 @@ class _DictionaryScreenState extends State<DictionaryScreen> {
       await db.insertSearchTerm(word);
       setState(() {
         _searchHistory.insert(0, word);
-        if (_searchHistory.length > 10) {
+        if (_searchHistory.length > 20) {
           _searchHistory.removeLast();
         }
       });
