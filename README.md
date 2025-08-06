@@ -54,12 +54,17 @@ Perfect for learners, travelers, and professionals who need quick and comprehens
 
 ## Some images
 
-### 1. Search word
+### 1. Example word
+| **1** | **2** | **3** |
+|-------|-------|-------|
+| <img src="sc/e2b-3.jpg" height="250"> | <img src="sc/e2b-4.jpg" height="250"> | <img src="sc/e2b-5.jpg" height="250"> |
+
+
+
+### 2. Search word
 | **1** | **2** |
 |-------|-------|
 | <img src="sc/e2b-1.jpg" height="250"> | <img src="sc/e2b-2.jpg" height="250"> |
-
-
 
 ---
 
