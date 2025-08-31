@@ -70,8 +70,7 @@ Perfect for learners, travelers, and professionals who need quick and comprehens
 
 ## APK
 
-[Download Latest APK](#) <!-- Add your APK release link here -->
-
+[Download Latest APK](https://drive.google.com/file/d/1xUB0iCtaRa_XTmvpAW9vwiC0LJj55wK8/view?usp=sharing)
 ---
 
 ## License
